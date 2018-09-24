@@ -37,7 +37,8 @@ module.exports = function headless(options, startnum, callback) {
   }
 
   options = options || {}
-
+  let _xvfb = 'Xvfb'
+  if(options.xvfbPath) _xvfb = options.xvfbPath
   var display = []
   if (options.display) {
     display = ['-screen', '0', options.display.width + 'x' + options.display.height + 'x' + (options.display.depth || 16)]
@@ -45,7 +46,7 @@ module.exports = function headless(options, startnum, callback) {
 
   findFreeServernum(startnum, function(servernum) {
     var args = [':' + servernum].concat(display).concat(options.args || []);
-    var childProcess = spawn('Xvfb', args, {stdio: options.stdio});
+    var childProcess = spawn(_xvfb, args, {stdio: options.stdio});
 
     // assume starting Xvfb takes less than 500 ms and continue if it hasn't
     // exited during that time
